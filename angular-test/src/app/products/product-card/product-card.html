@@ -1,0 +1,16 @@
+<article
+  class="group overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md"
+>
+  <div class="aspect-square overflow-hidden bg-gray-100">
+    <img
+      [src]="product().image"
+      [alt]="product().name"
+      loading="lazy"
+      class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+    />
+  </div>
+  <div class="p-4">
+    <h3 class="truncate text-sm font-medium text-gray-900">{{ product().name }}</h3>
+    <p class="mt-1 text-base font-semibold text-gray-900">{{ product().price | currency }}</p>
+  </div>
+</article>
