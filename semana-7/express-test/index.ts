@@ -41,11 +41,11 @@ app.use(cors());
 app.use(express.json());
 
 app.get('/products', async (req, res) => {
-    const random = Math.random();
-    if (random < 0.9) {
-        res.status(500).json({ error: 'Error interno del servidor' });
-        return;
-    }
+    // const random = Math.random();
+    // if (random < 0.9) {
+    //     res.status(500).json({ error: 'Error interno del servidor' });
+    //     return;
+    // }
     const search = req.query.search as string | undefined;
     if (search) {
         if(search.toLowerCase() === 'polo' || search.toLowerCase() === 'zapato') {
