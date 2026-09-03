@@ -49,7 +49,7 @@ app.get('/products', async (req, res) => {
     const search = req.query.search as string | undefined;
     if (search) {
         if(search.toLowerCase() === 'polo' || search.toLowerCase() === 'zapato') {
-            await new Promise(resolve => setTimeout(resolve, 10000)); // Simula un retraso de 2 segundos
+            await new Promise(resolve => setTimeout(resolve, 10000)); // Simula un retraso de 10 segundos
         }
         const filteredProducts = productos.filter(product => product.name.toLowerCase().includes(search.toLowerCase()));
         res.json(filteredProducts);
