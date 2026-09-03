@@ -4,7 +4,7 @@ import { ProductFilter } from '../product-filter/product-filter';
 import { Product } from '../product.model';
 import { ProductService } from '../product.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { concatMap, debounceTime, distinctUntilChanged, exhaustMap, mergeMap, of, switchMap } from 'rxjs';
+import { concatMap, debounceTime, distinctUntilChanged, exhaustMap, mergeMap, of, retry, switchMap, timer } from 'rxjs';
 
 @Component({
   imports: [ProductCard, ProductFilter],
@@ -26,7 +26,14 @@ export class ProductCatalog {
         return anterior.toLowerCase() === actual.toLowerCase()
       }),
       switchMap((term) => {
-        return this.productService.search(term)
+        return this.productService.search(term).pipe(
+          retry({
+            count: 2,
+            delay: () => {
+              return timer(5000)
+            }
+          })
+        )
       })
     ),
     {initialValue: []}
