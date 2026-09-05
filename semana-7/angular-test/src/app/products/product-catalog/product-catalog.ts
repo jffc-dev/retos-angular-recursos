@@ -5,6 +5,8 @@ import { Product } from '../product.model';
 import { ProductService } from '../product.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { concatMap, debounceTime, distinctUntilChanged, exhaustMap, mergeMap, of, retry, switchMap, timer } from 'rxjs';
+import { config } from '../../app.config.server';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   imports: [ProductCard, ProductFilter],
@@ -15,9 +17,22 @@ import { concatMap, debounceTime, distinctUntilChanged, exhaustMap, mergeMap, of
 })
 export class ProductCatalog {
   private readonly productService = inject(ProductService);
+  private activatedRoute = inject(ActivatedRoute)
+  private router = inject(Router)
 
   protected readonly searchTerm = signal('');
   protected readonly loading = signal(false);
+
+  constructor(){
+    const queryParamMap = this.activatedRoute.snapshot.queryParamMap
+    this.searchTerm.set(queryParamMap.get('search') ?? '')
+
+    effect(()=>{
+      this.router.navigate([], {
+        queryParams: { search: this.searchTerm()}
+      })
+    })
+  }
 
   protected readonly products: Signal<Product[]> = toSignal(
     toObservable(this.searchTerm).pipe(
@@ -38,16 +53,6 @@ export class ProductCatalog {
     ),
     {initialValue: []}
   )
-
-  constructor() {
-    // effect(() => {
-    //   this.loading.set(true);
-    //   this.productService.search(this.searchTerm()).subscribe((r) => {
-    //     this.products.set(r);
-    //     this.loading.set(false);
-    //   });
-    // });
-  }
 
   protected onSearchChange(term: string): void {
     this.searchTerm.set(term);
