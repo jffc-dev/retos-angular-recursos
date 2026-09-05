@@ -1,11 +1,10 @@
-import { Component, effect, inject, Signal, signal, WritableSignal } from '@angular/core';
+import { Component, inject, Signal, signal, } from '@angular/core';
 import { ProductCard } from '../product-card/product-card';
 import { ProductFilter } from '../product-filter/product-filter';
 import { Product } from '../product.model';
 import { ProductService } from '../product.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { concatMap, debounceTime, distinctUntilChanged, exhaustMap, mergeMap, of, retry, switchMap, timer } from 'rxjs';
-import { config } from '../../app.config.server';
+import { combineLatest, debounceTime, distinctUntilChanged, finalize, retry, switchMap, tap, timer } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -20,33 +19,46 @@ export class ProductCatalog {
   private activatedRoute = inject(ActivatedRoute)
   private router = inject(Router)
 
-  protected readonly searchTerm = signal('');
+  protected readonly busqueda = signal('');
+  protected readonly categoria = signal('');
   protected readonly loading = signal(false);
 
   constructor(){
     const queryParamMap = this.activatedRoute.snapshot.queryParamMap
-    this.searchTerm.set(queryParamMap.get('search') ?? '')
-
-    effect(()=>{
-      this.router.navigate([], {
-        queryParams: { search: this.searchTerm()}
-      })
-    })
+    this.busqueda.set(queryParamMap.get('search') ?? '')
+    this.categoria.set(queryParamMap.get('category') ?? '')
   }
 
   protected readonly products: Signal<Product[]> = toSignal(
-    toObservable(this.searchTerm).pipe(
+    combineLatest([
+      toObservable(this.busqueda),
+      toObservable(this.categoria),
+    ]).pipe(
       debounceTime(500),
-      distinctUntilChanged((anterior, actual)=>{
-        return anterior.toLowerCase() === actual.toLowerCase()
+      distinctUntilChanged(
+        ([busquedaAnterior, categoriaAnterior], [busquedaActual, categoriaActual])=>{
+          return (
+            busquedaAnterior.toLowerCase() === busquedaActual.toLowerCase() &&
+            categoriaAnterior === categoriaActual
+          )
       }),
-      switchMap((term) => {
-        return this.productService.search(term).pipe(
+      tap(([busqueda, categoria]) => {
+        this.loading.set(true)
+        this.router.navigate([], {
+          queryParams: { search: busqueda, category: categoria}
+        })
+      }),
+      switchMap(([busqueda, categoria]) => {
+        console.log(categoria)
+        return this.productService.search(busqueda, categoria).pipe(
           retry({
             count: 2,
             delay: () => {
               return timer(5000)
             }
+          }),
+          finalize(()=>{
+            this.loading.set(false)
           })
         )
       })
@@ -55,6 +67,11 @@ export class ProductCatalog {
   )
 
   protected onSearchChange(term: string): void {
-    this.searchTerm.set(term);
+    console.log(term)
+    this.busqueda.set(term);
+  }
+
+  protected onCategoryChange(categoria: string): void {
+    this.categoria.set(categoria);
   }
 }

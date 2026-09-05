@@ -10,9 +10,9 @@ const PRODUCTS_API_URL = 'http://localhost:3000/products';
 export class ProductService {
   private readonly http = inject(HttpClient);
 
-  search(query: string): Observable<Product[]> {
+  search(query: string, category: string): Observable<Product[]> {
     return this.http.get<Product[]>(PRODUCTS_API_URL, {
-      params: query ? { search: query } : {},
+      params: (query || category) ? { search: query, category: category } : {},
     });
   }
 }

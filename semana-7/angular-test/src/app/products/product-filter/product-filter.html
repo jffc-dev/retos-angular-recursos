@@ -18,3 +18,20 @@
     (input)="onInput($event)"
   />
 </div>
+
+<div>
+  @for (cat of categories(); track cat) {
+    <button
+      type="button"
+      class="rounded-full border px-3 py-1.5 text-sm font-medium transition-colors"
+      [class]="
+        category() === cat
+          ? 'border-blue-500 bg-blue-500 text-white'
+          : 'border-gray-300 text-gray-700 hover:bg-gray-100'
+      "
+      (click)="onCategoryClick(cat)"
+    >
+      {{ cat }}
+    </button>
+  }
+</div>
