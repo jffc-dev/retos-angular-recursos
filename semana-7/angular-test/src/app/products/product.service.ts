@@ -11,17 +11,25 @@ interface ApiProduct {
   image_url: string
 }
 
+const ELEMENTOS_POR_PAGINA = 20
+
 @Injectable({ providedIn: 'root' })
 export class ProductService {
   private readonly http = inject(HttpClient);
 
-  search(query: string, category: string): Observable<Product[]> {
+  search(query: string, category: string, pagina: number): Observable<Product[]> {
+    const desde = (pagina - 1) * ELEMENTOS_POR_PAGINA
+    const hasta = desde + ELEMENTOS_POR_PAGINA - 1
+
     return this.http.get<ApiProduct[]>(`${SUPABASE_REST_URL}/catalog_variants`, {
       params: (query || category) ? {
         product_name: `ilike.*${query}*`,
         category_names: `cs.{${category}}`
       } : {},
-      headers: SUPABASE_HEADERS
+      headers: {
+        ...SUPABASE_HEADERS,
+        Range: `${desde}-${hasta}`
+      }
     }).pipe(
       map((response: ApiProduct[]) => {
         return response.map((product) => this.toProduct(product))

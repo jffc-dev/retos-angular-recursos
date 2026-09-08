@@ -21,35 +21,42 @@ export class ProductCatalog {
 
   protected readonly busqueda = signal('');
   protected readonly categoria = signal('');
-  protected readonly loading = signal(false);
+  protected readonly pagina = signal(1);
+  protected readonly cargando = signal(false);
 
   constructor(){
     const queryParamMap = this.activatedRoute.snapshot.queryParamMap
     this.busqueda.set(queryParamMap.get('search') ?? '')
     this.categoria.set(queryParamMap.get('category') ?? '')
+    this.pagina.set(Number(queryParamMap.get('page')) ?? 1)
+
+    console.log(queryParamMap.get('category'))
   }
 
   protected readonly products: Signal<Product[]> = toSignal(
     combineLatest([
       toObservable(this.busqueda),
       toObservable(this.categoria),
+      toObservable(this.pagina),
     ]).pipe(
       debounceTime(500),
       distinctUntilChanged(
-        ([busquedaAnterior, categoriaAnterior], [busquedaActual, categoriaActual])=>{
+        ([busquedaAnterior, categoriaAnterior, paginaAnterior], [busquedaActual, categoriaActual, paginaActual])=>{
           return (
             busquedaAnterior.toLowerCase() === busquedaActual.toLowerCase() &&
-            categoriaAnterior === categoriaActual
+            categoriaAnterior === categoriaActual &&
+            paginaAnterior === paginaActual
           )
       }),
-      tap(([busqueda, categoria]) => {
-        this.loading.set(true)
+      tap(([busqueda, categoria, pagina]) => {
+        console.log(pagina)
+        this.cargando.set(true)
         this.router.navigate([], {
-          queryParams: { search: busqueda || null, category: categoria || null}
+          queryParams: { search: busqueda || null, category: categoria || null, page: pagina || null}
         })
       }),
-      switchMap(([busqueda, categoria]) => {
-        return this.productService.search(busqueda, categoria).pipe(
+      switchMap(([busqueda, categoria, pagina]) => {
+        return this.productService.search(busqueda, categoria, pagina).pipe(
           retry({
             count: 2,
             delay: () => {
@@ -57,7 +64,7 @@ export class ProductCatalog {
             }
           }),
           finalize(()=>{
-            this.loading.set(false)
+            this.cargando.set(false)
           })
         )
       })
@@ -67,10 +74,12 @@ export class ProductCatalog {
 
   protected onSearchChange(term: string): void {
     console.log(term)
-    this.busqueda.set(term);
+    this.busqueda.set(term)
+    this.pagina.set(1)
   }
 
   protected onCategoryChange(categoria: string): void {
-    this.categoria.set(categoria);
+    this.categoria.set(categoria)
+    this.pagina.set(1)
   }
 }

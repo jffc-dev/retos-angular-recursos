@@ -2,11 +2,12 @@
   <h1 class="mb-6 text-2xl font-semibold text-gray-900">Catálogo de productos</h1>
 
   <app-product-filter
-    [value]="busqueda()"
+    [searchInput]="busqueda()"
+    [categoryInput]="categoria()"
     (searchChange)="onSearchChange($event)"
     (categoryChange)="onCategoryChange($event)" />
 
-  @if (loading()) {
+  @if (cargando()) {
     <p class="mt-10 text-center text-sm text-gray-500">Buscando...</p>
   } @else if (products().length) {
     <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -17,4 +18,40 @@
   } @else {
     <p class="mt-10 text-center text-sm text-gray-500">No se encontraron productos.</p>
   }
+
+
+  <nav class="mt-8 flex items-center justify-center gap-2" aria-label="Paginación">
+    <button
+      type="button"
+      class="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+      [disabled]="1"
+      (click)="pagina.update((anterior) => anterior-1)"
+    >
+      Anterior
+    </button>
+
+    @for (p of [1,2,3,4]; track p) {
+      <button
+        type="button"
+        class="h-9 w-9 rounded-md border text-sm font-medium transition-colors"
+        [class]="
+          pagina() === p
+            ? 'border-blue-500 bg-blue-500 text-white'
+            : 'border-gray-300 text-gray-700 hover:bg-gray-100'
+        "
+        (click)="pagina.set(p)"
+      >
+        {{ p }}
+      </button>
+    }
+
+    <button
+      type="button"
+      class="rounded-md border border-gray-300 px-3 py-1.5 text-sm font-medium text-gray-700 hover:bg-gray-100 disabled:cursor-not-allowed disabled:opacity-40"
+      [disabled]="1"
+      (click)="pagina.update((anterior) => anterior+1)"
+    >
+      Siguiente
+    </button>
+  </nav>
 </section>

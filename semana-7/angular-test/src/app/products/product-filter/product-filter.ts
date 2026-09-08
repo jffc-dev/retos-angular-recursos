@@ -11,11 +11,16 @@ import { CategoryService } from '../../categories/category.service';
 })
 export class ProductFilter {
   private readonly categoryService = inject(CategoryService)
-  value = input('');
+  searchInput = input('');
+  categoryInput = input<string>('')
   searchChange = output<string>();
   categoryChange = output<string>();
   categories = toSignal(this.categoryService.findAll(), {initialValue: []})
   category = signal<string>('')
+
+  ngOnInit(): void {
+    this.category.set(this.categoryInput())
+  }
 
   protected onInput(event: Event): void {
     const value = (event.target as HTMLInputElement).value;
