@@ -17,7 +17,10 @@ export class ProductService {
 
   search(query: string, category: string): Observable<Product[]> {
     return this.http.get<ApiProduct[]>(`${SUPABASE_REST_URL}/catalog_variants`, {
-      params: (query || category) ? { product_name: `ilike.*${query}*` } : {},
+      params: (query || category) ? {
+        product_name: `ilike.*${query}*`,
+        category_names: `cs.{${category}}`
+      } : {},
       headers: SUPABASE_HEADERS
     }).pipe(
       map((response: ApiProduct[]) => {

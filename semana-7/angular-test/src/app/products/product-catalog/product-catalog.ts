@@ -49,7 +49,6 @@ export class ProductCatalog {
         })
       }),
       switchMap(([busqueda, categoria]) => {
-        console.log(categoria)
         return this.productService.search(busqueda, categoria).pipe(
           retry({
             count: 2,
