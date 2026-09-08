@@ -1,4 +1,6 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { CategoryService } from '../../categories/category.service';
 
 @Component({
   imports: [],
@@ -8,15 +10,11 @@ import { Component, input, output, signal } from '@angular/core';
   host: { class: 'block' },
 })
 export class ProductFilter {
+  private readonly categoryService = inject(CategoryService)
   value = input('');
   searchChange = output<string>();
   categoryChange = output<string>();
-  categories = signal<string[]>([
-    'Zapatos',
-    'Zapatillas',
-    'Polos',
-    'Poleras'
-  ])
+  categories = toSignal(this.categoryService.findAll(), {initialValue: []})
   category = signal<string>('')
 
   protected onInput(event: Event): void {
