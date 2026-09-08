@@ -45,7 +45,7 @@ export class ProductCatalog {
       tap(([busqueda, categoria]) => {
         this.loading.set(true)
         this.router.navigate([], {
-          queryParams: { search: busqueda, category: categoria}
+          queryParams: { search: busqueda || null, category: categoria || null}
         })
       }),
       switchMap(([busqueda, categoria]) => {
