@@ -18,15 +18,19 @@ export class AuthCookieService {
     return this.http
       .post<CookieUser>(
         `${environment.apiUrl}/api/login`,
-        { email, password },
-        { withCredentials: true }
+        { email, password }
+        // TODO: agregar { withCredentials: true } para que el navegador acepte la cookie httpOnly del login
       )
       .pipe(tap((user) => this.currentUser.set(user)));
   }
 
   logout(): Observable<void> {
     return this.http
-      .post<void>(`${environment.apiUrl}/api/logout`, {}, { withCredentials: true })
+      .post<void>(
+        `${environment.apiUrl}/api/logout`,
+        {}
+        // TODO: agregar { withCredentials: true } para que el navegador mande la cookie a borrar
+      )
       .pipe(tap(() => this.currentUser.set(null)));
   }
 
@@ -34,7 +38,10 @@ export class AuthCookieService {
   // verificar la sesión al entrar a una ruta protegida o al refrescar.
   me(): Observable<CookieUser> {
     return this.http
-      .get<CookieUser>(`${environment.apiUrl}/api/me`, { withCredentials: true })
+      .get<CookieUser>(
+        `${environment.apiUrl}/api/me`
+        // TODO: agregar { withCredentials: true } para que el navegador envíe la cookie httpOnly
+      )
       .pipe(tap((user) => this.currentUser.set(user)));
   }
 }
