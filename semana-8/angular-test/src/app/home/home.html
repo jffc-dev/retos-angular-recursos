@@ -1,0 +1,30 @@
+<div class="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+  <div class="w-full max-w-2xl">
+    <h1 class="mb-2 text-center text-3xl font-semibold text-slate-900">Demos de autenticación</h1>
+    <p class="mb-10 text-center text-slate-500">Dos estrategias, dos backends distintos.</p>
+
+    <div class="grid gap-6 sm:grid-cols-2">
+      <a
+        routerLink="/jwt/login"
+        class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition hover:shadow-md"
+      >
+        <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-violet-600">Opción A</p>
+        <h2 class="mb-2 text-lg font-semibold text-slate-900">JWT + Supabase</h2>
+        <p class="text-sm text-slate-500">
+          Sesión manejada por el SDK de Supabase, persistida en localStorage. Ideal para SPA sin backend propio.
+        </p>
+      </a>
+
+      <a
+        routerLink="/cookies/login"
+        class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200 transition hover:shadow-md"
+      >
+        <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-emerald-600">Opción B</p>
+        <h2 class="mb-2 text-lg font-semibold text-slate-900">Cookies + Express</h2>
+        <p class="text-sm text-slate-500">
+          Sesión con cookie httpOnly emitida por el backend en <code>express-test/</code>. El token nunca toca el JS del cliente.
+        </p>
+      </a>
+    </div>
+  </div>
+</div>

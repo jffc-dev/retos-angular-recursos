@@ -1,0 +1,21 @@
+<div class="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+  <div class="w-full max-w-sm rounded-xl bg-white p-8 shadow-sm ring-1 ring-slate-200">
+    <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-violet-600">Demo JWT + Supabase</p>
+    <h1 class="mb-4 text-2xl font-semibold text-slate-900">Sesión activa</h1>
+
+    <p class="text-sm text-slate-600">Autenticado como:</p>
+    <p class="mb-6 font-medium text-slate-900">{{ auth.currentUser()?.email }}</p>
+
+    <button
+      type="button"
+      (click)="logout()"
+      class="w-full rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+    >
+      Cerrar sesión
+    </button>
+
+    <a routerLink="/" class="mt-6 block text-center text-sm text-slate-500 hover:text-slate-700">
+      ← Volver al inicio
+    </a>
+  </div>
+</div>
