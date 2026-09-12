@@ -87,17 +87,21 @@ export class AuthJwtService {
   }
 
   private storeSession(res: SupabaseAuthResponse): void {
-    // TODO: guardar `res` en localStorage (localStorage.setItem(STORAGE_KEY, JSON.stringify(res)))
+    localStorage.setItem('dato-de-session', JSON.stringify(res))
     this.currentUser.set(res.user);
   }
 
   private clearSession(): void {
     // TODO: borrar la sesión de localStorage (localStorage.removeItem(STORAGE_KEY))
+    localStorage.removeItem('dato-de-session')
     this.currentUser.set(null);
   }
 
   private readStoredSession(): SupabaseAuthResponse | null {
-    // TODO: leer y parsear la sesión desde localStorage (localStorage.getItem(STORAGE_KEY))
-    return null;
+    const session = localStorage.getItem('dato-de-session')
+
+    if(session === null) return null
+
+    return JSON.parse(session);
   }
 }

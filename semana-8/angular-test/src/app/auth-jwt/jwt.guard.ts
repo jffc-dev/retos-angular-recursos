@@ -11,6 +11,7 @@ export const jwtGuard: CanActivateFn = () => {
     map(() => true),
     catchError(() => of(router.parseUrl('/jwt/login')))
   );
+  return true
 };
 
 // Para la ruta de login: si ya hay una sesión válida, saltamos directo al dashboard.
