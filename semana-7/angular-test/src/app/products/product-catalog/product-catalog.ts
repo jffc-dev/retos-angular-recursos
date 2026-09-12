@@ -8,9 +8,10 @@ import { combineLatest, debounceTime, distinctUntilChanged, finalize, retry, swi
 import { ActivatedRoute, Router } from '@angular/router';
 import { SearchResponse } from '../../core/search-product.interface';
 import { ProductPagination } from '../product-pagination/product-pagination';
+import { ProductCardSkeleton } from '../product-card-skeleton/product-card-skeleton';
 
 @Component({
-  imports: [ProductCard, ProductFilter, ProductPagination],
+  imports: [ProductCard, ProductFilter, ProductPagination, ProductCardSkeleton],
   selector: 'app-product-catalog',
   styleUrl: './product-catalog.css',
   templateUrl: './product-catalog.html',
@@ -20,19 +21,20 @@ export class ProductCatalog {
   private readonly productService = inject(ProductService);
   private activatedRoute = inject(ActivatedRoute)
   private router = inject(Router)
-  private ELEMENTOS_POR_PAGINA = 10
+  private ELEMENTOS_POR_PAGINA = 12
 
   protected readonly busqueda = signal('');
   protected readonly categoria = signal('');
   protected readonly pagina = signal(1);
-  protected readonly cargando = signal(false);
+  protected readonly cargando = signal(true);
+
+  totalSkeletons = Array.from({length: this.ELEMENTOS_POR_PAGINA}, (_, y) => y+1)
 
   constructor(){
     const queryParamMap = this.activatedRoute.snapshot.queryParamMap
     this.busqueda.set(queryParamMap.get('search') ?? '')
     this.categoria.set(queryParamMap.get('category') ?? '')
     this.pagina.set(Number(queryParamMap.get('page')) === 0 ? 1 : Number(queryParamMap.get('page')))
-    console.log(Number(queryParamMap.get('page')) ?? 1)
   }
 
   protected readonly resultadoBusqueda: Signal<SearchResponse> = toSignal(

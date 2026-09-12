@@ -7,8 +7,12 @@
     (searchChange)="onSearchChange($event)"
     (categoryChange)="onCategoryChange($event)" />
 
-  @if (cargando()) {
-    <p class="mt-10 text-center text-sm text-gray-500">Buscando...</p>
+  @if (cargando() === true) {
+    <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      @for (p of totalSkeletons; track p) {
+        <app-product-card-skeleton/>
+      }
+    </div>
   } @else if (products().length) {
     <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       @for (product of products(); track product.id) {
