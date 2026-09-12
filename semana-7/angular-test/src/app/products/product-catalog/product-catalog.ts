@@ -76,16 +76,18 @@ export class ProductCatalog {
 
   products = computed(() => this.resultadoBusqueda().data)
   totalPaginas = computed(() => Math.ceil(this.resultadoBusqueda().count / this.ELEMENTOS_POR_PAGINA))
-  listaPaginas = computed(() => Array.from({length: this.totalPaginas()}, (_, y) => y+1))
 
-  protected onSearchChange(term: string): void {
-    console.log(term)
+  onSearchChange(term: string): void {
     this.busqueda.set(term)
     this.pagina.set(1)
   }
 
-  protected onCategoryChange(categoria: string): void {
+  onCategoryChange(categoria: string): void {
     this.categoria.set(categoria)
     this.pagina.set(1)
+  }
+
+  onPageChange(page: number){
+    this.pagina.set(page)
   }
 }

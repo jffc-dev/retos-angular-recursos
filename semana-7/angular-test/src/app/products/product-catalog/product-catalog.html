@@ -19,5 +19,8 @@
     <p class="mt-10 text-center text-sm text-gray-500">No se encontraron productos.</p>
   }
 
-  <app-product-pagination [pagina]="pagina()" [listaPaginas]="listaPaginas()" [totalPaginas]="totalPaginas()"/>
+  <app-product-pagination
+    [pagina]="pagina()"
+    [totalPaginas]="totalPaginas()"
+    (cambioPagina)="onPageChange($event)"/>
 </section>
