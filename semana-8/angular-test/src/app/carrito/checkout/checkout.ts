@@ -31,8 +31,8 @@ export class Checkout {
     tipoDocumento: this.tipoDocumento,
     numeroDocumento: this.fb.nonNullable.control('', {
       validators: [Validators.required, documentoFormatoValidator(this.tipoDocumento)],
-      asyncValidators: [documentoExisteAsyncValidator(this.documentoService, this.tipoDocumento)],
-      updateOn: 'blur' as const,
+      asyncValidators: documentoExisteAsyncValidator(this.documentoService, this.tipoDocumento),
+      updateOn: 'blur'
     }),
     nombres: this.fb.nonNullable.control('', Validators.required),
     apellidos: this.fb.nonNullable.control('', Validators.required),

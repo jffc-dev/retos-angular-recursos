@@ -26,10 +26,10 @@ const RUCS_VALIDOS: Record<string, DatosRuc> = {
 @Injectable({ providedIn: 'root' })
 export class DocumentoService {
   consultarDni(dni: string): Observable<DatosDni | null> {
-    return of(DNIS_VALIDOS[dni] ?? null).pipe(delay(600));
+    return of(DNIS_VALIDOS[dni] ?? null).pipe(delay(6000));
   }
 
   consultarRuc(ruc: string): Observable<DatosRuc | null> {
-    return of(RUCS_VALIDOS[ruc] ?? null).pipe(delay(600));
+    return of(RUCS_VALIDOS[ruc] ?? null).pipe(delay(6000));
   }
 }

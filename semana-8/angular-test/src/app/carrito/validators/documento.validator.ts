@@ -3,7 +3,7 @@ import { Observable, map, of } from 'rxjs';
 import { DatosDni, DatosRuc, DocumentoService } from '../documento.service';
 
 const PATRON_DNI = /^\d{8}$/;
-const PATRON_RUC = /^(10|15|17|20)\d{9}$/;
+const PATRON_RUC = /^(10|15|20)\d{9}$/;
 
 /**
  * Valida el formato del documento leyendo el tipo desde el control hermano
@@ -39,6 +39,20 @@ export function documentoExisteAsyncValidator(
     // Tip: si guardas el observable de la consulta en una variable antes del .pipe(),
     // tipéala explícitamente como Observable<DatosDni | DatosRuc | null> para evitar
     // un problema de tipado de TS al resolver el overload de `.pipe()` sobre una unión.
-    return of(null);
+
+    const numeroDocumento = control.value
+    const tipoDocumento = tipoDocumentoCtrl.value
+    let observable$: Observable<DatosDni | DatosRuc | null>
+
+
+    if(tipoDocumento === 'DNI'){
+      observable$ = documentoService.consultarDni(numeroDocumento)
+    }else{
+      observable$ = documentoService.consultarRuc(numeroDocumento)
+    }
+
+    return observable$.pipe(
+      map((data) => data === null ? {documentoNoEncontrado: true} : null)
+    )
   };
 }
