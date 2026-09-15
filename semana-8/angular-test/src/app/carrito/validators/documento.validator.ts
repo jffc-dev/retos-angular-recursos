@@ -1,5 +1,5 @@
 import { AbstractControl, AsyncValidatorFn, ValidationErrors, ValidatorFn } from '@angular/forms';
-import { Observable, map } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 import { DatosDni, DatosRuc, DocumentoService } from '../documento.service';
 
 const PATRON_DNI = /^\d{8}$/;
@@ -29,12 +29,16 @@ export function documentoExisteAsyncValidator(
   tipoDocumentoCtrl: AbstractControl,
 ): AsyncValidatorFn {
   return (control: AbstractControl): Observable<ValidationErrors | null> => {
-    const valor = (control.value ?? '').toString().trim();
-    const consulta$: Observable<DatosDni | DatosRuc | null> =
-      tipoDocumentoCtrl.value === 'RUC'
-        ? documentoService.consultarRuc(valor)
-        : documentoService.consultarDni(valor);
-
-    return consulta$.pipe(map((datos) => (datos ? null : { documentoNoEncontrado: true })));
+    // TODO: implementar el AsyncValidatorFn.
+    // 1. Lee el valor a validar (control.value) y el tipo de documento (tipoDocumentoCtrl.value).
+    // 2. Según el tipo, llama a documentoService.consultarRuc(valor) o documentoService.consultarDni(valor).
+    //    Ambos devuelven un Observable<DatosRuc | DatosDni | null> (null = no encontrado).
+    // 3. Usa el operador `map` para transformar esa respuesta en lo que espera un AsyncValidatorFn:
+    //    - si se encontraron datos -> null (sin error)
+    //    - si no se encontró -> { documentoNoEncontrado: true }
+    // Tip: si guardas el observable de la consulta en una variable antes del .pipe(),
+    // tipéala explícitamente como Observable<DatosDni | DatosRuc | null> para evitar
+    // un problema de tipado de TS al resolver el overload de `.pipe()` sobre una unión.
+    return of(null);
   };
 }

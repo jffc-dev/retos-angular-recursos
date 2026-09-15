@@ -50,7 +50,9 @@ export class Checkout {
       this.router.navigateByUrl('/carrito');
     }
 
-    this.tipoDocumento.valueChanges.subscribe((tipo) => this.alCambiarTipoDocumento(tipo));
+    // TODO: suscribirse a this.tipoDocumento.valueChanges y, en cada cambio,
+    // llamar a this.alCambiarTipoDocumento(tipo) para habilitar/deshabilitar los
+    // campos correspondientes.
   }
 
   private crearLineaItem(productoId: string, nombreProducto: string, cantidadInicial: number) {
@@ -66,20 +68,13 @@ export class Checkout {
   }
 
   private alCambiarTipoDocumento(tipo: TipoDocumento): void {
-    if (tipo === 'DNI') {
-      this.form.controls.nombres.enable();
-      this.form.controls.apellidos.enable();
-      this.form.controls.razonSocial.disable();
-      this.form.controls.razonSocial.reset('');
-    } else {
-      this.form.controls.razonSocial.enable();
-      this.form.controls.nombres.disable();
-      this.form.controls.nombres.reset('');
-      this.form.controls.apellidos.disable();
-      this.form.controls.apellidos.reset('');
-    }
-
-    this.form.controls.numeroDocumento.reset('');
+    // TODO: implementar el enable()/disable() dinámico según el tipo de documento.
+    // - Si tipo === 'DNI': habilitar nombres y apellidos, deshabilitar razonSocial
+    //   (this.form.controls.nombres.enable() / .disable()) y limpiar razonSocial con reset('').
+    // - Si tipo === 'RUC': lo inverso (habilitar razonSocial, deshabilitar nombres y apellidos,
+    //   limpiándolos con reset('')).
+    // - En ambos casos, resetea numeroDocumento (this.form.controls.numeroDocumento.reset(''))
+    //   para que se revalide contra el nuevo tipo la próxima vez que se complete.
   }
 
   confirmar(): void {
