@@ -1,4 +1,4 @@
-import { Injectable, computed, signal } from '@angular/core';
+import { Injectable, computed, effect, signal } from '@angular/core';
 import { Producto } from './producto.model';
 
 export interface CartItem {
@@ -8,13 +8,26 @@ export interface CartItem {
 
 @Injectable({ providedIn: 'root' })
 export class CartService {
-  private readonly _items = signal<CartItem[]>([]);
+  private readonly localStorageKey = 'carrito'
+  private readonly _items = signal<CartItem[]>(this.readStorage());
 
   readonly items = this._items.asReadonly();
   readonly count = computed(() => this._items().reduce((total, item) => total + item.cantidad, 0));
   readonly total = computed(() =>
     this._items().reduce((total, item) => total + item.producto.precio * item.cantidad, 0),
   );
+
+  readStorage(): CartItem[]{
+    const data = JSON.parse(localStorage.getItem(this.localStorageKey) || '[]')
+    return data
+  }
+
+  constructor(){
+    effect(() => {
+      const stringData = JSON.stringify(this._items())
+      localStorage.setItem(this.localStorageKey, stringData)
+    })
+  }
 
   add(producto: Producto, cantidad: number): void {
     this._items.update((items) => {
