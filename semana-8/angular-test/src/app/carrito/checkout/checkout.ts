@@ -53,6 +53,11 @@ export class Checkout {
     // TODO: suscribirse a this.tipoDocumento.valueChanges y, en cada cambio,
     // llamar a this.alCambiarTipoDocumento(tipo) para habilitar/deshabilitar los
     // campos correspondientes.
+
+    this.tipoDocumento.valueChanges.subscribe((value) => {
+      console.log(value)
+      this.alCambiarTipoDocumento(value)
+    })
   }
 
   private crearLineaItem(productoId: string, nombreProducto: string, cantidadInicial: number) {
@@ -75,6 +80,21 @@ export class Checkout {
     //   limpiándolos con reset('')).
     // - En ambos casos, resetea numeroDocumento (this.form.controls.numeroDocumento.reset(''))
     //   para que se revalide contra el nuevo tipo la próxima vez que se complete.
+
+    if(tipo === 'DNI'){
+      this.form.controls.razonSocial.disable()
+      this.form.controls.nombres.enable()
+      this.form.controls.apellidos.enable()
+      this.form.controls.razonSocial.reset('')
+    } else { //RUC
+      this.form.controls.razonSocial.enable()
+      this.form.controls.nombres.disable()
+      this.form.controls.apellidos.disable()
+      this.form.controls.nombres.reset('')
+      this.form.controls.apellidos.reset('')
+    }
+
+    this.form.controls.numeroDocumento.reset('')
   }
 
   confirmar(): void {

@@ -53,36 +53,38 @@
             }
           </div>
 
-          <div class="grid gap-4 sm:grid-cols-2">
-            <div>
-              <label for="nombres" class="mb-1 block text-sm font-medium text-slate-700">Nombres</label>
+          @if(form.controls.tipoDocumento.value === 'DNI'){
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div>
+                <label for="nombres" class="mb-1 block text-sm font-medium text-slate-700">Nombres</label>
+                <input
+                  id="nombres"
+                  type="text"
+                  formControlName="nombres"
+                  class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:bg-slate-100 disabled:text-slate-400"
+                />
+              </div>
+              <div>
+                <label for="apellidos" class="mb-1 block text-sm font-medium text-slate-700">Apellidos</label>
+                <input
+                  id="apellidos"
+                  type="text"
+                  formControlName="apellidos"
+                  class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:bg-slate-100 disabled:text-slate-400"
+                />
+              </div>
+            </div>
+          }@else if(form.controls.tipoDocumento.value === 'RUC'){
+            <div class="mt-4">
+              <label for="razonSocial" class="mb-1 block text-sm font-medium text-slate-700">Razón social</label>
               <input
-                id="nombres"
+                id="razonSocial"
                 type="text"
-                formControlName="nombres"
+                formControlName="razonSocial"
                 class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:bg-slate-100 disabled:text-slate-400"
               />
             </div>
-            <div>
-              <label for="apellidos" class="mb-1 block text-sm font-medium text-slate-700">Apellidos</label>
-              <input
-                id="apellidos"
-                type="text"
-                formControlName="apellidos"
-                class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:bg-slate-100 disabled:text-slate-400"
-              />
-            </div>
-          </div>
-
-          <div class="mt-4">
-            <label for="razonSocial" class="mb-1 block text-sm font-medium text-slate-700">Razón social</label>
-            <input
-              id="razonSocial"
-              type="text"
-              formControlName="razonSocial"
-              class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:bg-slate-100 disabled:text-slate-400"
-            />
-          </div>
+          }
         </div>
 
         <div class="rounded-xl bg-white p-6 shadow-sm ring-1 ring-slate-200">
