@@ -1,0 +1,58 @@
+<div class="min-h-screen bg-slate-50 px-4 py-10">
+  <div class="mx-auto max-w-5xl">
+    <div class="mb-8 flex items-center justify-between">
+      <div>
+        <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-emerald-600">Demo carrito de compras</p>
+        <h1 class="text-2xl font-semibold text-slate-900">Catálogo de productos</h1>
+      </div>
+
+      <a
+        routerLink="/carrito"
+        class="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
+      >
+        Ver carrito ({{ cart.count() }})
+      </a>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      @for (producto of productos(); track producto.id) {
+        <div class="flex flex-col rounded-xl bg-white p-4 shadow-sm ring-1 ring-slate-200">
+          <img [src]="producto.imagenUrl" [alt]="producto.nombre" class="mb-3 h-40 w-full rounded-lg object-cover" />
+          <h2 class="text-sm font-semibold text-slate-900">{{ producto.nombre }}</h2>
+          <p class="mb-1 text-lg font-semibold text-slate-900">S/ {{ producto.precio.toFixed(2) }}</p>
+
+          @if (producto.stock > 0) {
+            <p class="mb-3 text-xs text-slate-500">Stock disponible: {{ producto.stock }}</p>
+          } @else {
+            <p class="mb-3 text-xs font-medium text-red-600">Sin stock</p>
+          }
+
+          <div class="mt-auto flex items-center gap-2">
+            <input
+              type="number"
+              min="1"
+              [max]="producto.stock"
+              [value]="cantidadDe(producto.id)"
+              (change)="actualizarCantidad(producto.id, cantidadInput.value)"
+              #cantidadInput
+              [disabled]="producto.stock === 0"
+              class="w-16 rounded-lg border border-slate-300 px-2 py-1 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 disabled:bg-slate-100"
+            />
+            <button
+              type="button"
+              [disabled]="producto.stock === 0"
+              (click)="agregar(producto)"
+              class="flex-1 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+            >
+              Agregar al carrito
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+
+    <a routerLink="/" class="mt-10 block text-center text-sm text-slate-500 hover:text-slate-700">
+      ← Volver al inicio
+    </a>
+  </div>
+</div>

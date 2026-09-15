@@ -27,5 +27,17 @@ export const routes: Routes = [
     loadComponent: () => import('./auth-cookie/dashboard/dashboard').then((m) => m.Dashboard),
     canActivate: [cookieGuard],
   },
+  {
+    path: 'productos',
+    loadComponent: () => import('./carrito/producto-catalogo/producto-catalogo').then((m) => m.ProductoCatalogo),
+  },
+  {
+    path: 'carrito',
+    loadComponent: () => import('./carrito/carrito/carrito').then((m) => m.Carrito),
+  },
+  {
+    path: 'carrito/pagar',
+    loadComponent: () => import('./carrito/checkout/checkout').then((m) => m.Checkout),
+  },
   { path: '**', redirectTo: '' },
 ];
