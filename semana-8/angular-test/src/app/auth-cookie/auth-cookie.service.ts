@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Observable, tap } from 'rxjs';
-import { environment } from '../../environments/environment';
 
 export interface CookieUser {
   username: string;
@@ -17,7 +16,7 @@ export class AuthCookieService {
   login(email: string, password: string): Observable<CookieUser> {
     return this.http
       .post<CookieUser>(
-        `${environment.apiUrl}/api/login`,
+        'http://localhost:3000/api/login',
         { email, password }
         // TODO: agregar { withCredentials: true } para que el navegador acepte la cookie httpOnly del login
       )
@@ -27,7 +26,7 @@ export class AuthCookieService {
   logout(): Observable<void> {
     return this.http
       .post<void>(
-        `${environment.apiUrl}/api/logout`,
+        'http://localhost:3000/api/logout',
         {}
         // TODO: agregar { withCredentials: true } para que el navegador mande la cookie a borrar
       )
@@ -39,7 +38,7 @@ export class AuthCookieService {
   me(): Observable<CookieUser> {
     return this.http
       .get<CookieUser>(
-        `${environment.apiUrl}/api/me`
+        'http://localhost:3000/api/me'
         // TODO: agregar { withCredentials: true } para que el navegador envíe la cookie httpOnly
       )
       .pipe(tap((user) => this.currentUser.set(user)));

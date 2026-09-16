@@ -1,7 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable, inject, signal } from '@angular/core';
 import { Observable, catchError, of, tap, throwError } from 'rxjs';
-import { environment } from '../../environments/environment';
 
 export interface SupabaseUser {
   id: string;
@@ -20,12 +19,12 @@ const STORAGE_KEY = 'sb-auth';
 @Injectable({ providedIn: 'root' })
 export class AuthJwtService {
   private readonly http = inject(HttpClient);
-  private readonly authUrl = `${environment.supabaseUrl}/auth/v1`;
+  private readonly authUrl = 'https://cdpmpetuwgsjwkpayfpg.supabase.co/auth/v1';
 
   readonly currentUser = signal<SupabaseUser | null>(this.readStoredSession()?.user ?? null);
 
   private get apiKeyHeaders(): HttpHeaders {
-    return new HttpHeaders({ apikey: environment.supabaseAnonKey });
+    return new HttpHeaders({ apikey: 'sb_publishable_Ex7VVi-UY2GRNpwQJnR_2A_9e99iHLc' });
   }
 
   signIn(email: string, password: string): Observable<SupabaseAuthResponse> {
