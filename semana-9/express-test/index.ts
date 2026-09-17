@@ -51,11 +51,13 @@ function parseContains(value: string): string {
 }
 
 const app = express();
+const restApi = express.Router();
 
 app.use(cors({ exposedHeaders: ['Content-Range'] }));
 app.use(express.json());
+app.use('/rest/v1', restApi);
 
-app.get('/catalog_variants', async (req, res) => {
+restApi.get('/catalog_variants', async (req, res) => {
     const productNameFilter = req.query.product_name as string | undefined;
     const categoryFilter = req.query.category_names as string | undefined;
 
@@ -95,7 +97,7 @@ app.get('/catalog_variants', async (req, res) => {
     res.json(pagina.map(({ category_names, ...producto }) => producto));
 });
 
-app.get('/category', (req, res) => {
+restApi.get('/category', (req, res) => {
     res.json(categories);
 });
 
