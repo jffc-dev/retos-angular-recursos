@@ -1,7 +1,6 @@
 import { Component, computed, inject, Signal, signal, } from '@angular/core';
 import { ProductCard } from '../product-card/product-card';
 import { ProductFilter } from '../product-filter/product-filter';
-import { Product } from '../product.model';
 import { ProductService } from '../product.service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { combineLatest, debounceTime, distinctUntilChanged, finalize, retry, switchMap, tap, timer } from 'rxjs';
@@ -9,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SearchResponse } from '../../core/search-product.interface';
 import { ProductPagination } from '../product-pagination/product-pagination';
 import { ProductCardSkeleton } from '../product-card-skeleton/product-card-skeleton';
+import { environment } from '../../../environments/environment';
 
 @Component({
   imports: [ProductCard, ProductFilter, ProductPagination, ProductCardSkeleton],
@@ -27,6 +27,7 @@ export class ProductCatalog {
   protected readonly categoria = signal('');
   protected readonly pagina = signal(1);
   protected readonly cargando = signal(true);
+  environment = environment.appEnvironment
 
   totalSkeletons = Array.from({length: this.ELEMENTOS_POR_PAGINA}, (_, y) => y+1)
 
