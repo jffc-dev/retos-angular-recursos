@@ -1,4 +1,6 @@
-export const environment = {
+import { EnvInterface } from "./env.type";
+
+export const environment: EnvInterface = {
   production: true,
   appEnvironment: 'PROD',
   supabaseApi: 'https://cdpmpetuwgsjwkpayfpg.supabase.co',

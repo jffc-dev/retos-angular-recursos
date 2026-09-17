@@ -2,7 +2,7 @@ import { EnvInterface } from "./env.type";
 
 export const environment: EnvInterface = {
   production: false,
-  appEnvironment: 'DEV',
-  supabaseApi: 'http://localhost:3000',
-  supabaseKey: '',
+  appEnvironment: 'TEST',
+  supabaseApi: 'http://ssaf',
+  supabaseKey: 'asdfasdf',
 };
