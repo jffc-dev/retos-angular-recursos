@@ -1,9 +1,12 @@
 <button
   #boton
-  type="button"
-  class="h-16 w-full rounded-2xl text-2xl font-medium shadow-md shadow-black/30 transition duration-100 select-none active:scale-95 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-300"
-  [class]="clases()"
-  (click)="alPresionar()"
+  class="h-16 w-full rounded-2xl bg-zinc-800 text-2xl font-medium text-zinc-100 shadow-md shadow-black/30 transition duration-100 select-none hover:bg-zinc-700 active:scale-95"
+  [class.bg-zinc-600!]="esFuncion()"
+  [class.bg-amber-500!]="esOperador()"
+  [class.text-zinc-950!]="esOperador()"
+  [class.scale-95]="estaPresionada()"
+  [class.brightness-125]="estaPresionada()"
+  (click)="manejarClick()"
 >
   <ng-content />
 </button>

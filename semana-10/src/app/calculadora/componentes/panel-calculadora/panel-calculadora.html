@@ -1,25 +1,38 @@
-<section
-  class="flex h-36 flex-col items-end justify-end overflow-hidden rounded-3xl bg-zinc-950/70 px-6 py-4 text-right font-mono ring-1 ring-white/5"
-  aria-live="polite"
+<div
+  class="flex h-36 items-end justify-end overflow-hidden rounded-3xl bg-zinc-950/70 px-6 py-4 text-right font-mono ring-1 ring-white/5"
 >
-  <p class="h-7 text-xl text-amber-300/80" data-testid="memoria">
+  <div class="w-full text-5xl font-light text-zinc-50">
     @if (memoria() !== '0') {
-      {{ memoria() }} {{ operador() }}
+      <span class="text-xl text-amber-300/80"> {{ memoria() }} {{ operador() }} </span>
+      <br />
     }
-  </p>
-  <p class="w-full truncate font-light text-zinc-50" [class]="tamanoPantalla()" data-testid="pantalla">
-    {{ pantalla() }}
-  </p>
-</section>
+
+    <span>{{ pantalla() }}</span>
+  </div>
+</div>
 
 <div class="mt-5 grid grid-cols-4 gap-3">
-  @for (tecla of distribucion; track tecla.etiqueta) {
-    <app-tecla
-      [variante]="tecla.variante"
-      [ancha]="tecla.ancha ?? false"
-      (presionada)="alPresionarTecla($event)"
-    >
-      {{ tecla.etiqueta }}
-    </app-tecla>
-  }
+  <app-tecla (presionar)="manejarClick($event)" esFuncion>C</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)" esFuncion>+/-</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)" esFuncion>%</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)" esOperador>÷</app-tecla>
+
+  <app-tecla (presionar)="manejarClick($event)">7</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)">8</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)">9</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)" esOperador>×</app-tecla>
+
+  <app-tecla (presionar)="manejarClick($event)">4</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)">5</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)">6</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)" esOperador>-</app-tecla>
+
+  <app-tecla (presionar)="manejarClick($event)">1</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)">2</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)">3</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)" esOperador>+</app-tecla>
+
+  <app-tecla (presionar)="manejarClick($event)">0</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)">.</app-tecla>
+  <app-tecla (presionar)="manejarClick($event)" esOperador esDoble>=</app-tecla>
 </div>

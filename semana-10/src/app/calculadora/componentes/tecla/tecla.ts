@@ -1,56 +1,51 @@
-import {
-  booleanAttribute,
-  Component,
-  computed,
-  ElementRef,
-  input,
-  output,
-  signal,
-  viewChild,
-} from '@angular/core';
-
-export type VarianteTecla = 'digito' | 'funcion' | 'operador';
-
-const ESTILOS: Record<VarianteTecla, string> = {
-  digito: 'bg-zinc-800 text-zinc-100 hover:bg-zinc-700',
-  funcion: 'bg-zinc-600 text-zinc-50 hover:bg-zinc-500',
-  operador: 'bg-amber-500 text-zinc-950 hover:bg-amber-400',
-};
+import { Component, ElementRef, input, output, signal, viewChild } from '@angular/core';
 
 @Component({
   selector: 'app-tecla',
   templateUrl: './tecla.html',
   host: {
-    class: 'block',
-    '[class.col-span-2]': 'ancha()',
+    '[class.col-span-2]': 'esDoble()',
   },
 })
 export class Tecla {
-  public readonly variante = input<VarianteTecla>('digito');
-  public readonly ancha = input(false, { transform: booleanAttribute });
+  public estaPresionada = signal(false);
 
-  public readonly presionada = output<string>();
+  public presionar = output<string>();
+  public contenido = viewChild<ElementRef<HTMLButtonElement>>('boton');
 
-  protected readonly resaltada = signal(false);
-  private readonly boton = viewChild.required<ElementRef<HTMLButtonElement>>('boton');
+  public esOperador = input(false, {
+    transform: (valor: boolean | string) => (typeof valor === 'string' ? valor === '' : valor),
+  });
 
-  protected readonly clases = computed(() =>
-    [ESTILOS[this.variante()], this.resaltada() ? 'scale-95 brightness-125' : ''].join(' '),
-  );
+  public esFuncion = input(false, {
+    transform: (valor: boolean | string) => (typeof valor === 'string' ? valor === '' : valor),
+  });
 
-  private get valor(): string {
-    return this.boton().nativeElement.textContent?.trim() ?? '';
+  public esDoble = input(false, {
+    transform: (valor: boolean | string) => (typeof valor === 'string' ? valor === '' : valor),
+  });
+
+  manejarClick() {
+    if (!this.contenido()?.nativeElement) {
+      return;
+    }
+
+    const valor = this.contenido()!.nativeElement.innerText;
+
+    this.presionar.emit(valor.trim());
   }
 
-  protected alPresionar(): void {
-    this.presionada.emit(this.valor);
-  }
+  public estiloPresionadoTeclado(tecla: string) {
+    if (!this.contenido()) return;
 
-  /** Resalta la tecla por un instante si coincide con la tecla física pulsada */
-  public resaltarSi(tecla: string): void {
-    if (this.valor !== tecla) return;
+    const valor = this.contenido()!.nativeElement.innerText;
 
-    this.resaltada.set(true);
-    setTimeout(() => this.resaltada.set(false), 120);
+    if (valor !== tecla) return;
+
+    this.estaPresionada.set(true);
+
+    setTimeout(() => {
+      this.estaPresionada.set(false);
+    }, 100);
   }
 }

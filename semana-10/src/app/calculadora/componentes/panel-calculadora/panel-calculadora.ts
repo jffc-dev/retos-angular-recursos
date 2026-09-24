@@ -1,77 +1,46 @@
 import { Component, computed, inject, viewChildren } from '@angular/core';
-import { Tecla, VarianteTecla } from '../tecla/tecla';
-import { esTeclaValida, MotorCalculadora } from '../../servicios/motor-calculadora';
-
-interface DefinicionTecla {
-  etiqueta: string;
-  variante: VarianteTecla;
-  ancha?: boolean;
-}
-
-const EQUIVALENCIAS_TECLADO: Record<string, string> = {
-  Escape: 'C',
-  Delete: 'C',
-  '*': '×',
-  x: '×',
-  X: '×',
-  '/': '÷',
-  Enter: '=',
-};
+import { Tecla } from '../tecla/tecla';
+import { MotorCalculadora } from '../../servicios/motor-calculadora';
 
 @Component({
   selector: 'app-panel-calculadora',
   imports: [Tecla],
   templateUrl: './panel-calculadora.html',
   host: {
-    '(document:keydown)': 'alPulsarTeclado($event)',
+    '(document:keyup)': 'manejarTeclado($event)',
   },
 })
 export class PanelCalculadora {
-  private readonly motor = inject(MotorCalculadora);
-  private readonly teclas = viewChildren(Tecla);
+  private motorCalculadora = inject(MotorCalculadora);
 
-  protected readonly pantalla = this.motor.pantalla;
-  protected readonly memoria = this.motor.memoria;
-  protected readonly operador = this.motor.operador;
+  public teclas = viewChildren(Tecla);
 
-  protected readonly tamanoPantalla = computed(() =>
-    this.pantalla().length > 8 ? 'text-4xl' : 'text-6xl',
-  );
+  public pantalla = computed(() => this.motorCalculadora.pantalla());
+  public memoria = computed(() => this.motorCalculadora.memoria());
+  public operador = computed(() => this.motorCalculadora.operador());
 
-  protected readonly distribucion: DefinicionTecla[] = [
-    { etiqueta: 'C', variante: 'funcion' },
-    { etiqueta: '+/-', variante: 'funcion' },
-    { etiqueta: '%', variante: 'funcion' },
-    { etiqueta: '÷', variante: 'operador' },
-    { etiqueta: '7', variante: 'digito' },
-    { etiqueta: '8', variante: 'digito' },
-    { etiqueta: '9', variante: 'digito' },
-    { etiqueta: '×', variante: 'operador' },
-    { etiqueta: '4', variante: 'digito' },
-    { etiqueta: '5', variante: 'digito' },
-    { etiqueta: '6', variante: 'digito' },
-    { etiqueta: '-', variante: 'operador' },
-    { etiqueta: '1', variante: 'digito' },
-    { etiqueta: '2', variante: 'digito' },
-    { etiqueta: '3', variante: 'digito' },
-    { etiqueta: '+', variante: 'operador' },
-    { etiqueta: '0', variante: 'digito' },
-    { etiqueta: '.', variante: 'digito' },
-    { etiqueta: '=', variante: 'operador', ancha: true },
-  ];
-
-  protected alPresionarTecla(tecla: string): void {
-    this.motor.procesarTecla(tecla);
+  manejarClick(tecla: string) {
+    this.motorCalculadora.procesarTecla(tecla);
   }
 
-  protected alPulsarTeclado(evento: KeyboardEvent): void {
-    const tecla = EQUIVALENCIAS_TECLADO[evento.key] ?? evento.key;
-    if (!esTeclaValida(tecla)) return;
+  manejarTeclado(evento: KeyboardEvent) {
+    const equivalencias: Record<string, string> = {
+      Escape: 'C',
+      Clear: 'C',
+      '*': '×',
+      x: '×',
+      X: '×',
+      '/': '÷',
+      Enter: '=',
+    };
 
-    // Evita que Enter "haga click" en el botón enfocado y duplique la entrada
-    evento.preventDefault();
+    const tecla = evento.key;
+    const valorTecla = equivalencias[tecla] ?? tecla;
 
-    this.alPresionarTecla(tecla);
-    this.teclas().forEach((t) => t.resaltarSi(tecla));
+    this.manejarClick(valorTecla);
+
+    this.teclas().forEach((boton) => {
+      boton.estiloPresionadoTeclado(valorTecla);
+    });
   }
 }
