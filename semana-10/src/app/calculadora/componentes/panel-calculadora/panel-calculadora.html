@@ -1,0 +1,25 @@
+<section
+  class="flex h-36 flex-col items-end justify-end overflow-hidden rounded-3xl bg-zinc-950/70 px-6 py-4 text-right font-mono ring-1 ring-white/5"
+  aria-live="polite"
+>
+  <p class="h-7 text-xl text-amber-300/80" data-testid="memoria">
+    @if (memoria() !== '0') {
+      {{ memoria() }} {{ operador() }}
+    }
+  </p>
+  <p class="w-full truncate font-light text-zinc-50" [class]="tamanoPantalla()" data-testid="pantalla">
+    {{ pantalla() }}
+  </p>
+</section>
+
+<div class="mt-5 grid grid-cols-4 gap-3">
+  @for (tecla of distribucion; track tecla.etiqueta) {
+    <app-tecla
+      [variante]="tecla.variante"
+      [ancha]="tecla.ancha ?? false"
+      (presionada)="alPresionarTecla($event)"
+    >
+      {{ tecla.etiqueta }}
+    </app-tecla>
+  }
+</div>

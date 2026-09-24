@@ -1,3 +1,12 @@
 import { Routes } from '@angular/router';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  {
+    path: 'calculadora',
+    loadComponent: () => import('./calculadora/paginas/calculadora-page/calculadora-page'),
+  },
+  {
+    path: '**',
+    redirectTo: 'calculadora',
+  },
+];
