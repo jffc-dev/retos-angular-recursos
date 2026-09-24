@@ -37,8 +37,12 @@ export class RecaptchaV2Login {
     }
 
     this.recaptchaService.verify(this.token()).subscribe((result) => {
+      console.log(result)
       if(result){
         // procedemos con auth http a supabase
+        if(this.form.valid){
+          // validamos credenciales
+        }
       }else{
         // mostrar mensaje de error en la validacion de captcha
       }
@@ -48,7 +52,6 @@ export class RecaptchaV2Login {
 
 
     // TODO: integrar reCAPTCHA v2 y enviar el token junto con las credenciales.
-    console.log('recaptcha-v2 login', this.form.getRawValue());
   }
 
   onTokenSubmit(token: string){

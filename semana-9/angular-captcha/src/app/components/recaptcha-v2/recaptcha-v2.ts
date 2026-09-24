@@ -68,7 +68,6 @@ export class RecaptchaV2 {
       script.async = true;
       script.defer = true;
       script.onload = () => {
-        console.log('data')
         resolve()
       }
       script.onerror = () => {

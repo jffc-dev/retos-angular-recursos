@@ -17,7 +17,7 @@ import { withSupabase } from "@supabase/server";
 //
 // El secret NUNCA debe viajar al navegador, por eso la llamada se hace aquí.
 const SITEVERIFY_URL = "https://www.google.com/recaptcha/api/siteverify";
-const MAX_TOKEN_LENGTH = 2048;
+const MAX_TOKEN_LENGTH = 4096;
 const TIMEOUT_MS = 10_000;
 
 interface SiteverifyResponse {
@@ -85,8 +85,12 @@ async function verify(req: Request): Promise<Response> {
   }
 
   const { token } = body;
-  if (typeof token !== "string" || !token || token.length > MAX_TOKEN_LENGTH) {
+  if (typeof token !== "string" || !token) {
     return json({ valid: false, reason: "invalid_token" }, 400);
+  }
+
+  if (token.length > MAX_TOKEN_LENGTH) {
+    return json({ valid: false, reason: "invalid_token_length" }, 400);
   }
 
   const secret = Deno.env.get("RECAPTCHA_SECRET");
