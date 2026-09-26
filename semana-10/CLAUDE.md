@@ -1,0 +1,1 @@
+- No ejecutes ninguna consulta SQL, ni mandes a llamar peticiones HTTP

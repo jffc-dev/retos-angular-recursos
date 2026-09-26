@@ -1,0 +1,46 @@
+<article
+  class="w-full max-w-xs rounded-[2rem] bg-linear-to-b from-zinc-800 to-zinc-900 p-5 shadow-2xl shadow-black/60 ring-1 ring-white/10"
+>
+  <header class="mb-4 px-1 text-xs tracking-widest text-zinc-400 uppercase">
+    <h1>Contador</h1>
+  </header>
+
+  <output
+    class="mb-2 block text-center text-6xl font-light text-zinc-100 tabular-nums"
+    [class.text-red-400!]="contadorService.esNegativo()"
+    aria-live="polite"
+    aria-label="Valor actual del contador"
+  >
+    {{ contadorService.contador() }}
+  </output>
+
+  <p class="mb-6 text-center text-sm text-zinc-400">
+    {{ contadorService.esPar() ? 'Par' : 'Impar' }}
+  </p>
+
+  <div class="grid grid-cols-3 gap-3">
+    <button
+      type="button"
+      class="h-16 rounded-2xl bg-zinc-700 text-2xl text-zinc-100 transition hover:bg-zinc-600 focus-visible:outline-2 focus-visible:outline-amber-400 active:scale-95"
+      aria-label="Decrementar"
+      (click)="contadorService.decrementar()"
+    >
+      −
+    </button>
+    <button
+      type="button"
+      class="h-16 rounded-2xl bg-zinc-600 text-base text-zinc-100 transition hover:bg-zinc-500 focus-visible:outline-2 focus-visible:outline-amber-400 active:scale-95"
+      (click)="contadorService.reiniciar()"
+    >
+      Reiniciar
+    </button>
+    <button
+      type="button"
+      class="h-16 rounded-2xl bg-amber-500 text-2xl text-zinc-950 transition hover:bg-amber-400 focus-visible:outline-2 focus-visible:outline-amber-200 active:scale-95"
+      aria-label="Incrementar"
+      (click)="contadorService.incrementar()"
+    >
+      +
+    </button>
+  </div>
+</article>
